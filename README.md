@@ -1,6 +1,6 @@
 # Проект: Место
 
-### _Ссылка:_ https://kochetkov1.github.io/mesto-react/
+### _Ссылка:_ https://kochetkov1.github.io/react-mesto-auth/
 ___
 ## Обзор
 
