@@ -1,4 +1,12 @@
 import React from "react";
+import {
+  Routes,
+  Route,
+  Link,
+  // BrowserRouter,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -9,6 +17,11 @@ import avatarImg from "../images/profile-photo.jpg";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import ProtectedRoute from "./ProtectedRoute";
+import Register from "./Register";
+import Login from "./Login";
+import InfoTooltip from "./InfoTooltip";
+import { register, authorization, getContent } from "../utils/authApi";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
@@ -26,6 +39,9 @@ function App() {
     avatar: avatarImg,
   });
   const [cards, setCards] = React.useState([]);
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [registeredIn, setRegisteredIn] = React.useState(false);
+  // let navigate = useNavigate();
 
   React.useEffect(() => {
     api
@@ -136,21 +152,77 @@ function App() {
       });
   }, []);
 
+  // Выход из приложения
+  function handleSignOut() {
+    // Удаление токена
+    localStorage.removeItem("jwt");
+    setLoggedIn(false);
+    // Переадресация на страницу входа
+    // navigate("/sign-in");
+  }
+
+  // console.log(currentUser);
+
+  function handleOnRegister(email, password) {
+    register({ email, password })
+      .then((res) => {
+        if (res.data) {
+          setRegisteredIn(true);
+        }
+        // navigate("/sign-in");
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      })
+      .finally(() => {
+        // setIsInfoTooltipPopupOpen(true);
+      });
+  }
+
+  function handleOnLogin() {}
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <div className="page">
-          <Header />
-
-          <Main
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditAvatar={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
-            cards={cards}
+          <Header
+            email={currentUser.cohort}
+            onSignOut={handleSignOut}
+            // поменять!
           />
+
+          {/* <BrowserRouter> */}
+            <Routes>
+              <Route
+                path="/signup"
+                element={<Register onRegister={handleOnRegister} />}
+              />
+
+              <Route
+                path="/signin"
+                element={<Login onLogin={handleOnLogin} />}
+              />
+
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute loggedIn={!loggedIn}>
+                    {/* убрать !  */}
+                    <Main
+                      onEditProfile={handleEditProfileClick}
+                      onAddPlace={handleAddPlaceClick}
+                      onEditAvatar={handleEditAvatarClick}
+                      onCardClick={handleCardClick}
+                      onCardLike={handleCardLike}
+                      onCardDelete={handleCardDelete}
+                      cards={cards}
+                    />
+                  </ProtectedRoute>
+                }
+              />
+  
+            </Routes>
+          {/* </BrowserRouter> */}
 
           <Footer />
 
