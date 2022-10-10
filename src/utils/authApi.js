@@ -7,33 +7,33 @@ function handleServerResponse(res) {
 }
 
 function register(email, password) {
-  return fetch(`${this._url}/signup`, {
+  return fetch(`${BASE_URL}/signup`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ password: password, email: email }),
   }).then(handleServerResponse);
 }
 
 function authorization(email, password) {
-  return fetch(`${this._url}/signin`, {
+  return fetch(`${BASE_URL}/signin`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ password: password, email: email }),
   }).then(handleServerResponse);
 }
 
 function getContent(jwt) {
-  return fetch(`${this._url}/users/me`, {
-    method: "POST",
+  return fetch(`${BASE_URL}/users/me`, {
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${jwt}`
-    }
+      Authorization: `Bearer ${jwt}`,
+    },
   }).then(handleServerResponse);
 }
 
-export {register, authorization, getContent};
+export { register, authorization, getContent };

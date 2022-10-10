@@ -1,14 +1,7 @@
 import React from "react";
-import {
-  Routes,
-  Route,
-  Link,
-  BrowserRouter,
-  useNavigate,
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Register(props) {
-
   const { onRegister } = props;
 
   const [email, setEmail] = React.useState("");
@@ -29,7 +22,6 @@ function Register(props) {
     onRegister(email, password);
   }
 
-  
   return (
     <div className="register__container">
       <h2 className="popup__title register__title">Регистрация</h2>
@@ -66,14 +58,13 @@ function Register(props) {
         <button
           type="submit"
           className="popup__save-button register__submit-button"
-          // onClick={handleSubmit}
         >
           Зарегистрироваться
         </button>
       </form>
       <div className="register__signin-container">
         <p className="register__text">Уже зарегистрированы?</p>
-        <Link to="/signin" className="register__signin">
+        <Link to="/sign-in" className="register__signin">
           Войти
         </Link>
       </div>
