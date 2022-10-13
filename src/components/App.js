@@ -38,17 +38,8 @@ function App() {
   const [registeredIn, setRegisteredIn] = React.useState(false);
   const [UserEmail, setUserEmail] = React.useState("");
   const navigate = useNavigate();
+// card
 
-  React.useEffect(() => {
-    api
-      .getInitialCards()
-      .then((initialCards) => {
-        setCards(initialCards);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
 
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
@@ -137,18 +128,8 @@ function App() {
         console.log(err);
       });
   }
+// user
 
-  React.useEffect(() => {
-    api
-      .getUserProfile()
-      .then((data) => {
-        setCurrentUser(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-      tokenCheck();
-  }, []);
 
   // Регистрация в приложении
   function handleOnRegister(email, password) {
@@ -206,6 +187,7 @@ function App() {
         .then((res) => {
           setLoggedIn(true);
           setUserEmail(res.data.email);
+          // navigate("/");
         })
         .catch((err) => {
           console.log(err);
@@ -214,9 +196,38 @@ function App() {
   }
 
   React.useEffect(() => {
+    tokenCheck();
+}, []);
+
+  React.useEffect(() => {
+    if (loggedIn) {
+      api
+      .getInitialCards()
+      .then((initialCards) => {
+        setCards(initialCards);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+  }, [loggedIn]);
+
+  React.useEffect(() => {
+    if (loggedIn) {
+      api
+      .getUserProfile()
+      .then((data) => {
+        setCurrentUser(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+  }, [loggedIn]);
+
+  React.useEffect(() => {
     if (loggedIn) {
       setRegisteredIn(false);
-      navigate("/");
     }
   }, [loggedIn]);
 
